@@ -1,6 +1,6 @@
 package com.svlugovoy.simplerestclient.restclient.service;
 
-//import com.svlugovoy.simplerestclient.api.domain.User;
+import com.svlugovoy.simplerestclient.api.domain.User;
 import com.svlugovoy.simplerestclient.api.domain.UserData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
