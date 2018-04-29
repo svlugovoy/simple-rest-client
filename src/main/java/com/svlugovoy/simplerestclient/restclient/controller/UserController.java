@@ -20,32 +20,37 @@ public class UserController {
     }
 
     @GetMapping({"", "/", "/index"})
-    public String index(){
+    public String index() {
         return "index";
     }
 
-    @PostMapping(value = "/users", params="action=save")
-    public String formPost(Model model, ServerWebExchange serverWebExchange){
+    @PostMapping(value = "/users")
+    public String formPost(Model model, ServerWebExchange serverWebExchange) {
 
         MultiValueMap<String, String> map = serverWebExchange.getFormData().block();
-        Integer limit = new Integer(map.get("limit").get(0));
+        String limitParam = map.get("limit").get(0);
+        Integer limit = !limitParam.equals("") ? new Integer(limitParam) : 0;
 
         log.info("Received Limit value from controller: " + limit);
         //default if null or zero
-        if(limit == null || limit == 0){
+        if (limit == null || limit == 0) {
             log.info("Setting limit to default of 10");
             limit = 10;
         }
 
-        model.addAttribute("users", apiService.getUsers(limit));
+        String action = map.get("action").get(0);
+        if ("classic".equals(action)) {
+            model.addAttribute("users", apiService.getUsers(limit));
+        } else if ("reactive".equals(action)) {
+            model.addAttribute("users", apiService.getUsers(limit));
+//            model.addAttribute("users", apiService.getUsers(serverWebExchange.getFormData()
+//                                            .map(data -> new Integer(data.getFirst("limit")))));
+        } else {
+            throw new RuntimeException("param: " + action + " is not supported.");
+        }
 
         return "userslist";
     }
-
-//    @RequestMapping(value="/edit", method=RequestMethod.POST, params="action=save")
-//     public ModelAndView edit(@ModelAttribute SomeModel model,
-//     @RequestParam(value="action", required=true) String action)
-
 
 
 }
