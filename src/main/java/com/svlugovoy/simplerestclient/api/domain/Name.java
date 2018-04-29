@@ -1,4 +1,4 @@
-package com.svlugovoy.simplerestclient.domain;
+package com.svlugovoy.simplerestclient.api.domain;
 
 import lombok.Data;
 
